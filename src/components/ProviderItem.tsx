@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {getProviderApis} from '../apiService';
 export interface Api {
     contact: Contact
@@ -27,28 +27,36 @@ export interface Api {
     url: string
     version: string
   }
+  
 
-const ProviderItem = ({provider}:{provider: string}) => {
+const ProviderItem = ({provider, setOnApiClick, setDetail, setSideBarOpen}:{provider: string, setOnApiClick: Dispatch<SetStateAction<boolean>>, setDetail: Dispatch<SetStateAction<Api | null>>, setSideBarOpen: Dispatch<SetStateAction<boolean>> }) => {
     const [url, setUrl] = useState('');
     const [title, setTitle] = useState('');
-    const [detail, setDetail] = useState<Api | null >(null);   
+   // const [detail, setDetail] = useState<Api | null >(null);   
+    //let curDetail : Api;
       useEffect(() => {
-        let ignore = false;      
+        let ignore = false;     
         getProviderApis(provider).then(result => {
           if (!ignore) {
-            setDetail(result.apis[provider]);
+            setDetail(result.apis[provider].info);
             setUrl(result.apis[provider].info['x-logo'].url);
-            setTitle(result.apis[provider].info['title']);
+            setTitle(result.apis[provider].info.title);
           }
         });
+        ;
         return () => {
           ignore = true;
         }
       }, [provider]);
+      function handleClick(){
+        //
+        setOnApiClick(true);
+        setSideBarOpen(false);
+      };
   return (
     <>
         <img src={url} width="30" height="30"></img>
-        <p>{title}</p>
+        <div style={{cursor: "pointer"}} onClick={handleClick}>{title}</div>
     </>
   );
 };

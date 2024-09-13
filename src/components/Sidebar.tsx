@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import ProviderList from './ProviderList';
+import { Dispatch, SetStateAction } from 'react';
+import { Api } from './ProviderItem';
 
 const SidebarWrapper = styled.div<{ isOpen: boolean }>`
   width: ${({ isOpen }) => (isOpen ? '250px' : '0')};
@@ -17,11 +19,11 @@ interface Provider {
 }
 
 
-const Sidebar = ({isopen, providers} :{ isopen: boolean, providers:Provider}) => {
+const Sidebar = ({isopen, providers, setOnApiClick, setDetail, setSideBarOpen} :{ isopen: boolean, providers:Provider, setOnApiClick:Dispatch<SetStateAction<boolean>>, setDetail: Dispatch<SetStateAction<Api | null>>, setSideBarOpen: Dispatch<SetStateAction<boolean>>}) => {
 
     const listItems = providers.data.map(item =>
         <li key={item}>
-          <ProviderList provider={item}></ProviderList>
+          <ProviderList provider={item} setOnApiClick={setOnApiClick} setDetail={setDetail} setSideBarOpen={setSideBarOpen}></ProviderList>
         </li>
       );
 
