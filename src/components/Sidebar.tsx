@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import ProviderList from './ProviderList';
 import { Dispatch, SetStateAction } from 'react';
-import { Api } from './ProviderItem';
+import { Provider } from './ProviderItem';
 
 const SidebarWrapper = styled.div<{ isOpen: boolean }>`
   width: ${({ isOpen }) => (isOpen ? '250px' : '0')};
@@ -14,16 +14,17 @@ const SidebarWrapper = styled.div<{ isOpen: boolean }>`
   overflow-x: hidden;
   transition: 0.5s;
 `;
-interface Provider {
+
+interface ProviderList {
     data : string[],
 }
 
 
-const Sidebar = ({isopen, providers, setOnApiClick, setDetail, setSideBarOpen} :{ isopen: boolean, providers:Provider, setOnApiClick:Dispatch<SetStateAction<boolean>>, setDetail: Dispatch<SetStateAction<Api | null>>, setSideBarOpen: Dispatch<SetStateAction<boolean>>}) => {
+const Sidebar = ({isopen, providers, setOnApiClick ,setDetail, setSideBarOpen, setCurrentProvider} :{ isopen: boolean, providers:ProviderList, setOnApiClick:Dispatch<SetStateAction<boolean>>,setDetail: Dispatch<SetStateAction<Provider[] | null>>, setSideBarOpen: Dispatch<SetStateAction<boolean>>, setCurrentProvider: Dispatch<SetStateAction<string>>}) => {
 
     const listItems = providers.data.map(item =>
         <li key={item}>
-          <ProviderList provider={item} setOnApiClick={setOnApiClick} setDetail={setDetail} setSideBarOpen={setSideBarOpen}></ProviderList>
+          <ProviderList provider={item} setOnApiClick={setOnApiClick} setDetail={setDetail} setSideBarOpen={setSideBarOpen} setCurrentProvider={setCurrentProvider}></ProviderList>
         </li>
       );
 

@@ -4,18 +4,18 @@ import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import {getProviders} from './apiService';
 import ApiDetails from './components/ApiDetails';
-import { Api } from './components/ProviderItem';
+import { Api, Provider } from './components/ProviderItem';
 //import ProviderList from './components/ProviderList';
 //import ApiList from './components/ApiList';
 //import ApiDetails from './components/ApiDetails';
-
 const App = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [onApiClick, setOnApiClick] = useState(false);
   const [providers, setProviders] = useState({
     data : []
   });
-  const [detail, setDetail] = useState<Api | null >(null); 
+  const [detail, setDetail] = useState<Provider[] | null>(null); 
+  const [currentProvider, setCurrentProvider] = useState<string>(''); 
    
   useEffect(() => {
     let ignore = false;
@@ -33,7 +33,7 @@ const App = () => {
   return (
     <div className="wrapper">
        {
-        onApiClick ? (<ApiDetails detail={detail} setOnApiClick={setOnApiClick}>
+        onApiClick ? (<ApiDetails detail={ detail[currentProvider]} setOnApiClick={setOnApiClick}>
 
         </ApiDetails>)
         : (<button
@@ -45,7 +45,7 @@ const App = () => {
       }
       
 
-      <Sidebar isopen={isSidebarOpen} providers={providers} setOnApiClick={setOnApiClick} setDetail={setDetail} setSideBarOpen={setSidebarOpen}>
+      <Sidebar isopen={isSidebarOpen} providers={providers} setOnApiClick={setOnApiClick} setDetail={setDetail} setSideBarOpen={setSidebarOpen} setCurrentProvider={setCurrentProvider}>
       </Sidebar>
      
 

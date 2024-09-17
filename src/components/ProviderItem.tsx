@@ -1,5 +1,8 @@
 import {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {getProviderApis} from '../apiService';
+export interface Provider {
+  [key:string] : Api,
+}
 export interface Api {
     contact: Contact
     description: string
@@ -29,16 +32,21 @@ export interface Api {
   }
   
 
-const ProviderItem = ({provider, setOnApiClick, setDetail, setSideBarOpen}:{provider: string, setOnApiClick: Dispatch<SetStateAction<boolean>>, setDetail: Dispatch<SetStateAction<Api | null>>, setSideBarOpen: Dispatch<SetStateAction<boolean>> }) => {
+const ProviderItem = ({provider, setOnApiClick, setDetail, setSideBarOpen, setCurrentProvider}:{provider: string, setOnApiClick: Dispatch<SetStateAction<boolean>>,setDetail: Dispatch<SetStateAction<Provider[] | null>>, 
+  setSideBarOpen: Dispatch<SetStateAction<boolean>>, setCurrentProvider: Dispatch<SetStateAction<string>> }) => {
     const [url, setUrl] = useState('');
     const [title, setTitle] = useState('');
    // const [detail, setDetail] = useState<Api | null >(null);   
     //let curDetail : Api;
+    let info :Api;
+    let providers : Provider[]= [];
       useEffect(() => {
         let ignore = false;     
         getProviderApis(provider).then(result => {
           if (!ignore) {
-            setDetail(result.apis[provider].info);
+            info = result.apis[provider].info;
+            providers=[...providers,{provider:info}];
+            setDetail(providers);  
             setUrl(result.apis[provider].info['x-logo'].url);
             setTitle(result.apis[provider].info.title);
           }
@@ -49,7 +57,7 @@ const ProviderItem = ({provider, setOnApiClick, setDetail, setSideBarOpen}:{prov
         }
       }, [provider]);
       function handleClick(){
-        //
+        setCurrentProvider(provider);
         setOnApiClick(true);
         setSideBarOpen(false);
       };
